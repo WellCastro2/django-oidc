@@ -46,10 +46,11 @@ class OpenIdConnectBackend(ModelBackend):
         # built-in safeguards for multiple threads.
         if getattr(settings, 'OIDC_CREATE_UNKNOWN_USER', True):
             # args = {UserModel.USERNAME_FIELD: username, 'defaults': openid_data, }
-            args = {email: email, 'defaults': openid_data, }
-            user, created = UserModel.objects.update_or_create(**args)
-            if created:
-                user = self.configure_user(user)
+            # args = {email: email, 'defaults': openid_data, }
+            # user, created = UserModel.objects.update_or_create(**args)
+            user = UserModel.objects.filter(email=email).first()
+            # if created:
+                # user = self.configure_user(user)
         else:
             try:
                 user = UserModel.objects.get_by_natural_key(username)
